@@ -7,8 +7,11 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.8",
+<<<<<<< HEAD
     "browserslist": "^4.23.0",
     "caniuse-lite": "^1.0.30001609",
+=======
+>>>>>>> f6c75692af82264a0a265fd234c1607e206389a0
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
@@ -21,6 +24,15 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+<<<<<<< HEAD
+=======
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+>>>>>>> f6c75692af82264a0a265fd234c1607e206389a0
   "browserslist": {
     "production": [
       ">0.2%",
@@ -32,8 +44,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+<<<<<<< HEAD
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.14.5"
+=======
+>>>>>>> f6c75692af82264a0a265fd234c1607e206389a0
   }
 }

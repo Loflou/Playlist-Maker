@@ -68,6 +68,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<<<<<<< HEAD
 
 ## Prerequisites
 
@@ -76,3 +77,5 @@ Before running any terminal commands for this project, make sure to activate the
 1. Open a terminal or command prompt.
 2. Run the following command to activate the environment: conda activate ytm
 Make sure to run this command every time you start a new terminal session to ensure that you are using the correct environment with the necessary dependencies.
+=======
+>>>>>>> f6c75692af82264a0a265fd234c1607e206389a0

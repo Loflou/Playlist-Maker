@@ -5,12 +5,12 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 import os
+from dotenv import load_dotenv
 
 from playlists import get_playlists, create_playlist, update_playlist, delete_playlist
 from videos import add_video_to_playlist, remove_video_from_playlist, get_playlist_videos
 from auth import authenticate_youtube
 from models import User, SessionLocal, engine, Base
-from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -53,7 +53,7 @@ def authenticate_user(db, username: str, password: str):
 
 def create_access_token(data: dict):
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.utcnow().now(datetime.UTC) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
