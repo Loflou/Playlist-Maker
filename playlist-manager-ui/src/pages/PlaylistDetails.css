@@ -1,0 +1,42 @@
+/* Basic styles for Playlist Details page */
+.playlist-details-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.playlist-details-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.playlist-details-description {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.playlist-videos-list {
+    width: 100%;
+    list-style: none;
+    padding: 0;
+}
+
+.playlist-video-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.video-title {
+    font-size: 18px;
+}
+
+.video-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Add any additional styles as needed */

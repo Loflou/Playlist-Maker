@@ -1,0 +1,55 @@
+/* Styles for CreatePlaylist page */
+
+.createPlaylistContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.createPlaylistForm {
+    width: 100%;
+    max-width: 500px;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.formField {
+    margin-bottom: 20px;
+}
+
+.formField label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.formField input,
+.formField textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.formField input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.formField input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.errorMessage {
+    color: red;
+    margin-bottom: 20px;
+}
+
+.successMessage {
+    color: green;
+    margin-bottom: 20px;
+}
