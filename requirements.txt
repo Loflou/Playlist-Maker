@@ -3,7 +3,7 @@ google-auth-oauthlib
 google-auth-httplib2
 google-api-python-client
 httplib2
-fastapi==0.68.0
+fastapi==0.109.1
 uvicorn==0.15.0
 sqlalchemy==1.4.22
 python-jose==3.3.0
