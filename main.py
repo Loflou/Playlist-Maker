@@ -1,11 +1,13 @@
 from fastapi import FastAPI, Request, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from playlist import router as playlist_router
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 import os
 from dotenv import load_dotenv
+from typing import Optional
 
 from playlists import get_playlists, create_playlist, update_playlist, delete_playlist
 from videos import add_video_to_playlist, remove_video_from_playlist, get_playlist_videos
@@ -16,11 +18,13 @@ load_dotenv()
 
 app = FastAPI()
 
+app.include_router(playlist_router)
+
 # Database
 Base.metadata.create_all(bind=engine)
 
 # Authentication
-SECRET_KEY = os.getenv("SECRET_KEY")  # INPUT_REQUIRED {config_description: "your_secret_key"}
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -51,12 +55,37 @@ def authenticate_user(db, username: str, password: str):
         return False
     return user
 
-def create_access_token(data: dict):
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
-    expire = datetime.utcnow().now(datetime.UTC) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    user = get_user(db, username=username)
+    if user is None:
+        raise credentials_exception
+    return user
+
+@app.get("/")
+async def root():
+    return {"message": "Welcome to the YouTube Playlist Manager API"}
 
 @app.post("/register")
 async def register_user(username: str, email: str, password: str, db: Session = Depends(get_db)):
@@ -78,19 +107,22 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token = create_access_token(data={"sub": user.username})
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.username}, expires_delta=access_token_expires
+    )
     return {"access_token": access_token, "token_type": "bearer"}
 
 # Existing YouTube playlist management endpoints below
 
 @app.get("/playlists")
-async def list_playlists():
+async def list_playlists(current_user: User = Depends(get_current_user)):
     youtube = authenticate_youtube()
     playlists = get_playlists(youtube)
     return {"playlists": playlists}
 
 @app.post("/playlists")
-async def create_new_playlist(request: Request):
+async def create_new_playlist(request: Request, current_user: User = Depends(get_current_user)):
     data = await request.json()
     title = data.get("title")
     description = data.get("description")
@@ -108,7 +140,7 @@ async def create_new_playlist(request: Request):
         raise HTTPException(status_code=500, detail="Failed to create playlist")
 
 @app.put("/playlists/{playlist_id}")
-async def update_playlist_endpoint(playlist_id: str, request: Request):
+async def update_playlist_endpoint(playlist_id: str, request: Request, current_user: User = Depends(get_current_user)):
     data = await request.json()
     title = data.get("title")
     description = data.get("description")
@@ -123,7 +155,7 @@ async def update_playlist_endpoint(playlist_id: str, request: Request):
         raise HTTPException(status_code=404, detail="Playlist not found")
 
 @app.delete("/playlists/{playlist_id}")
-async def delete_playlist_endpoint(playlist_id: str):
+async def delete_playlist_endpoint(playlist_id: str, current_user: User = Depends(get_current_user)):
     youtube = authenticate_youtube()
     success = delete_playlist(youtube, playlist_id)
     
@@ -133,7 +165,7 @@ async def delete_playlist_endpoint(playlist_id: str):
         raise HTTPException(status_code=404, detail="Playlist not found")
 
 @app.post("/playlists/{playlist_id}/videos")
-async def add_video_to_playlist_endpoint(playlist_id: str, request: Request):
+async def add_video_to_playlist_endpoint(playlist_id: str, request: Request, current_user: User = Depends(get_current_user)):
     data = await request.json()
     video_id = data.get("video_id")
     
@@ -149,7 +181,7 @@ async def add_video_to_playlist_endpoint(playlist_id: str, request: Request):
         raise HTTPException(status_code=404, detail="Playlist not found")
 
 @app.delete("/playlists/{playlist_id}/videos/{video_id}")
-async def remove_video_from_playlist_endpoint(playlist_id: str, video_id: str):
+async def remove_video_from_playlist_endpoint(playlist_id: str, video_id: str, current_user: User = Depends(get_current_user)):
     youtube = authenticate_youtube()
     success = remove_video_from_playlist(youtube, playlist_id, video_id)
     
@@ -159,7 +191,7 @@ async def remove_video_from_playlist_endpoint(playlist_id: str, video_id: str):
         raise HTTPException(status_code=404, detail="Playlist or video not found")
 
 @app.get("/playlists/{playlist_id}/videos")
-async def get_playlist_videos_endpoint(playlist_id: str):
+async def get_playlist_videos_endpoint(playlist_id: str, current_user: User = Depends(get_current_user)):
     youtube = authenticate_youtube()
     videos = get_playlist_videos(youtube, playlist_id)
     

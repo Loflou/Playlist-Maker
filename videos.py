@@ -1,6 +1,6 @@
 import googleapiclient.errors
 
-def search_video(youtube, query):
+def search_video(youtube, query: str):
     try:
         request = youtube.search().list(
             part="id",
@@ -17,7 +17,7 @@ def search_video(youtube, query):
         print(f"An HTTP error occurred: {error}")
         return None
 
-def add_video_to_playlist(youtube, playlist_id, video_id):
+def add_video_to_playlist(youtube, playlist_id: str, video_id: str):
     try:
         request = youtube.playlistItems().insert(
             part="snippet",
@@ -38,7 +38,7 @@ def add_video_to_playlist(youtube, playlist_id, video_id):
         print(f"An HTTP error occurred: {error}")
         return False
 
-def remove_video_from_playlist(youtube, playlist_id, video_id):
+def remove_video_from_playlist(youtube, playlist_id: str, video_id: str):
     try:
         request = youtube.playlistItems().delete(
             id=video_id
@@ -50,7 +50,7 @@ def remove_video_from_playlist(youtube, playlist_id, video_id):
         print(f"An HTTP error occurred: {error}")
         return False
 
-def get_playlist_videos(youtube, playlist_id):
+def get_playlist_videos(youtube, playlist_id: str):
     try:
         request = youtube.playlistItems().list(
             part="snippet",

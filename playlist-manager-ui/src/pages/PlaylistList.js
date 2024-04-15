@@ -40,6 +40,10 @@ function PlaylistList() {
     return <div>Error: {error}</div>;
   }
 
+  if (playlists.length === 0) {
+    return <div>No playlists found.</div>;
+  }
+
   return (
     <div>
       <h2>Playlists</h2>

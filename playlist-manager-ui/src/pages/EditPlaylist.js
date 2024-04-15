@@ -20,6 +20,11 @@ const EditPlaylist = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (playlistDetails.title.trim() === '') {
+    // Add validation check to ensure title is not empty
+      console.error('Title cannot be empty');
+      return;
+    }
     try {
       // Assuming the backend API endpoint for updating a playlist is "/api/playlists/update"
       const response = await axios.put('/api/playlists/update', playlistDetails);

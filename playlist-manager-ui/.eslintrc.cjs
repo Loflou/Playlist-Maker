@@ -1,11 +1,6 @@
 module.exports = {
-  extends: "react-app",
+  extends: ['react-app', 'react-app/jest'],
   rules: {
-    // Add custom rules here
+    // Add any additional custom rules here
   },
-  settings: {
-    react: {
-      version: "detect" // Automatically detect the react version
-    }
-  }
 };

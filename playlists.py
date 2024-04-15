@@ -1,15 +1,20 @@
 import googleapiclient.errors
+from typing import List
 
 def get_playlists(youtube):
-    request = youtube.playlists().list(
-        part="snippet",
-        mine=True,
-        maxResults=25
-    )
-    response = request.execute()
-    return response.get("items", [])
+    try:
+        request = youtube.playlists().list(
+            part="snippet",
+            mine=True,
+            maxResults=25
+        )
+        response = request.execute()
+        return response.get("items", [])
+    except googleapiclient.errors.HttpError as error:
+        print(f"An HTTP error occurred: {error}")
+        return []
 
-def create_playlist(youtube, title, description, tags):
+def create_playlist(youtube, title: str, description: str, tags: List[str]):
     try:
         request = youtube.playlists().insert(
             part="snippet,status",
@@ -32,7 +37,7 @@ def create_playlist(youtube, title, description, tags):
         print(f"An HTTP error occurred: {error}")
         return None
 
-def update_playlist(youtube, playlist_id, title, description, tags):
+def update_playlist(youtube, playlist_id: str, title: str, description: str, tags: List[str]):
     try:
         request = youtube.playlists().update(
             part="snippet,status",
@@ -56,7 +61,7 @@ def update_playlist(youtube, playlist_id, title, description, tags):
         print(f"An HTTP error occurred: {error}")
         return None
 
-def delete_playlist(youtube, playlist_id):
+def delete_playlist(youtube, playlist_id: str):
     try:
         request = youtube.playlists().delete(
             id=playlist_id
