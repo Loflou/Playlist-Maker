@@ -40,6 +40,14 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.14.5"
-  }
+    "@babel/plugin-proposal-private-property-in-object": "^7.14.5",
+    "eslint": "^8.0.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-react": "^7.34.1"
+  },
+  "description": "This project is a web application for managing YouTube playlists. It allows users to create, update, and delete playlists, as well as add and remove videos from playlists.",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
