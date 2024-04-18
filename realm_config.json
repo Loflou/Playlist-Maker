@@ -1,0 +1,7 @@
+{
+    "app_id": "custom_gpt-oqdbv",
+    "config_version": 20210101,
+    "name": "custom_gpt",
+    "provider_region": "azure-eastus2",
+    "deployment_model": "LOCAL"
+}
