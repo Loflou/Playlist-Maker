@@ -1,7 +1,8 @@
 {
-    "app_id": "custom_gpt-oqdbv",
+    "app_id": "application-0-afyzvmv",
     "config_version": 20210101,
-    "name": "custom_gpt",
-    "provider_region": "azure-eastus2",
-    "deployment_model": "LOCAL"
+    "name": "Application-0",
+    "provider_region": "aws-us-east-1",
+    "deployment_model": "LOCAL",
+    "environment": "development"
 }
